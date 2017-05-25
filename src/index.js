@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import {Provider}  from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import {applyMiddleware, createStore}  from 'redux';
 import {promiseMiddleware}  from './middleware';
 import registerServiceWorker from './registerServiceWorker';
@@ -13,10 +14,15 @@ const defaultState = {
 };
 
 const reducer = (state = defaultState, action)=>{
-    return state;
+    switch(action.type){
+        case 'HOME_PAGE_LOADED':
+            return {appName:state.appName, articles:action.payload.articles};
+        default:
+            return state;
+    }
 }
 
-const store = createStore(reducer, applyMiddleware(promiseMiddleware));
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(promiseMiddleware)));
 
 ReactDOM.render((
         <Provider store = {store}>
